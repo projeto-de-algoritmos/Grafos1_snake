@@ -1,3 +1,8 @@
 import pygame
-import time
-import random
+from game import Game
+
+if __name__ == "__main__":
+    pygame.init()
+    game = Game()
+    game.run()
+    pygame.quit()
