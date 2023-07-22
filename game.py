@@ -15,3 +15,11 @@ class Game:
         self.snake_speed = 15
         self.snake = Snake(self.screen_width, self.screen_height, self.block_size)
         self.food = self.generate_food()
+    
+    def generate_food(self):
+        food_x = round(random.randrange(0, self.screen_width - self.block_size) / self.block_size) * self.block_size
+        food_y = round(random.randrange(0, self.screen_height - self.block_size) / self.block_size) * self.block_size
+        return food_x, food_y
+    
+    def draw_food(self):
+        pygame.draw.rect(self.game_display, (213, 50, 80), [self.food[0], self.food[1], self.block_size, self.block_size])
