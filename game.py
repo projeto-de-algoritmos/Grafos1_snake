@@ -23,3 +23,30 @@ class Game:
     
     def draw_food(self):
         pygame.draw.rect(self.game_display, (213, 50, 80), [self.food[0], self.food[1], self.block_size, self.block_size])
+
+
+    def run(self):
+        game_over = False
+
+        while not game_over:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    game_over = True
+                if event.type == pygame.KEYDOWN:
+                    self.snake.handle_event(event.key)
+
+            self.snake.move()
+            if self.snake.check_collision(self.screen_width, self.screen_height):
+                game_over = True
+            if self.snake.check_eat(self.food):
+                self.snake.grow()
+                self.food = self.generate_food()
+
+            self.game_display.fill((255, 255, 255))
+            self.draw_food()
+            self.snake.draw(self.game_display)
+
+            pygame.display.update()
+            self.clock.tick(self.snake_speed)
+
+        pygame.quit()
