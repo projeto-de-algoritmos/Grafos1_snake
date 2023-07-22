@@ -16,7 +16,7 @@ class Game:
         pygame.display.set_caption('Snake Game')
         self.clock = pygame.time.Clock()
         self.block_size = 20
-        
+
         self.levels = [
             Level("Fácil", 10),
             Level("Médio", 15),
@@ -53,9 +53,44 @@ class Game:
     def draw_food(self):
         pygame.draw.rect(self.game_display, (213, 50, 80), [self.food[0], self.food[1], self.block_size, self.block_size])
 
+    def level_selection(self):
+        level_selected = False
+
+        while not level_selected:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    # Obtem a posição do mouse
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+
+                    # Verifica se o mouse clicou em algum botão de nível
+                    for i, level in enumerate(self.levels):
+                        button_x = self.screen_width // 3
+                        button_y = self.screen_height // 3 + 50 + i * 40
+                        button_width = 200
+                        button_height = 40
+                        if button_x < mouse_x < button_x + button_width and button_y < mouse_y < button_y + button_height:
+                            self.current_level = i
+                            level_selected = True
+
+            self.game_display.fill((255, 255, 255))
+            font_style = pygame.font.SysFont(None, 50)
+            message = font_style.render("Selecione o Nível:", True, (0, 0, 0))
+            self.game_display.blit(message, (self.screen_width // 3, self.screen_height // 3))
+            level_names = [f"{i+1}. {level.name}" for i, level in enumerate(self.levels)]
+            for i, name in enumerate(level_names):
+                level_text = font_style.render(name, True, (0, 0, 0))
+                self.game_display.blit(level_text, (self.screen_width // 3, (self.screen_height // 3) + 50 + i * 40))
+
+            pygame.display.update()
+            self.clock.tick(5)
 
     def run(self):
         game_over = False
+
+        self.level_selection()
 
         while not game_over:
             for event in pygame.event.get():
